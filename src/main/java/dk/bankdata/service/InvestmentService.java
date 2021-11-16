@@ -60,6 +60,13 @@ public class InvestmentService {
     Account accountAktiesparekonto = accountService.getAccountAktiesparekonto();
     Account accountBoersen = accountService.getAccountBoersen();
 
+    accountAktiesparekonto.setBalance(
+        accountAktiesparekonto.getBalance() - shareEntity.getCurrentPrice());
+    entityManager.persist(accountAktiesparekonto);
+    accountBoersen.setBalance(
+        accountBoersen.getBalance() + shareEntity.getCurrentPrice());
+    entityManager.persist(accountAktiesparekonto);
+
     OwnedShare ownedShare = new OwnedShare();
     ownedShare.setShare(shareEntity);
     ownedShare.setBuyPrice(shareEntity.getCurrentPrice());
