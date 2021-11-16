@@ -90,8 +90,18 @@ public class InvestmentService {
 
     Account accountAktiesparekonto = accountService.getAccountAktiesparekonto();
     Account accountBoersen = accountService.getAccountBoersen();
+
+    double profit = ownedShareEntity.getShare().getCurrentPrice() - ownedShareEntity.getBuyPrice();
+    double gain = profit / ownedShareEntity.getBuyPrice();
+    double actualProfit = profit;
+    if (gain > 0 && gain < 0.50)
+      actualProfit = profit - profit * 0.21;
+    else if (gain >= 0.50)
+      actualProfit = profit - profit * 0.41;
+    double total = ownedShareEntity.getBuyPrice() + actualProfit;
+
     accountAktiesparekonto.setBalance(
-        accountAktiesparekonto.getBalance() + ownedShareEntity.getShare().getCurrentPrice());
+        accountAktiesparekonto.getBalance() + total);
     entityManager.persist(accountAktiesparekonto);
     accountBoersen.setBalance(
         accountBoersen.getBalance() - ownedShareEntity.getShare().getCurrentPrice());
